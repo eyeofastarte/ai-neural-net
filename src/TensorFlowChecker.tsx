@@ -66,13 +66,13 @@ export default function TensorFlowChecker() {
   }, []);
 
   const getStatusIcon = (available: boolean) => {
-    return available ? '✓' : '✗';
+    return available ? 'OK' : 'FAIL';
   };
 
 
   return (
     <div className="w-full">
-      <h1 className="text-4xl mb-4 bg-linear-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">🧠 TensorFlow.js System Check</h1>
+      <h1 className="text-4xl mb-4 bg-linear-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">TensorFlow.js System Check</h1>
       <p className="text-slate-400 mb-8 text-base">TensorFlow.js Version: {tfVersion}</p>
 
       {loading ? (
@@ -101,14 +101,14 @@ export default function TensorFlowChecker() {
               <div className="text-left">
                 {backend.available ? (
                   <>
-                    <p className="text-lg font-semibold my-2 text-slate-200">✅ Successfully Connected</p>
+                    <p className="text-lg font-semibold my-2 text-slate-200">Successfully Connected</p>
                     {backend.active && (
                       <p className="inline-block bg-emerald-500 text-slate-900 px-3 py-1 rounded-full text-sm font-semibold mt-2">Currently Active</p>
                     )}
                   </>
                 ) : (
                   <>
-                    <p className="text-lg font-semibold my-2 text-slate-200">❌ Failed to Connect</p>
+                    <p className="text-lg font-semibold my-2 text-slate-200">Failed to Connect</p>
                     {backend.error && (
                       <p className="text-sm text-red-400 mt-2 italic">{backend.error}</p>
                     )}
