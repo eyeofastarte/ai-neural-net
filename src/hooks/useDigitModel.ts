@@ -1,22 +1,34 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import * as tf from '@tensorflow/tfjs';
+import { getModelById } from '../models/mnistModels';
 
-const MODEL_URL =
-  'https://storage.googleapis.com/tfjs-models/tfjs/mnist_transfer_cnn_v1/model.json';
-
-export function useDigitModel() {
+export function useDigitModel(modelId: string) {
   const [model, setModel] = useState<tf.LayersModel | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const modelRef = useRef<tf.LayersModel | null>(null);
 
   useEffect(() => {
     let mounted = true;
+    setLoading(true);
+    setError(null);
+    setModel(null);
 
-    tf.loadLayersModel(MODEL_URL)
+    const modelConfig = getModelById(modelId);
+    if (!modelConfig) {
+      setError(`Model ${modelId} not found`);
+      setLoading(false);
+      return;
+    }
+
+    tf.loadLayersModel(modelConfig.url)
       .then((loadedModel) => {
         if (mounted) {
+          modelRef.current = loadedModel;
           setModel(loadedModel);
           setLoading(false);
+        } else {
+          loadedModel.dispose();
         }
       })
       .catch((err) => {
@@ -28,8 +40,12 @@ export function useDigitModel() {
 
     return () => {
       mounted = false;
+      if (modelRef.current) {
+        modelRef.current.dispose();
+        modelRef.current = null;
+      }
     };
-  }, []);
+  }, [modelId]);
 
   const predict = useCallback(
     (canvas: HTMLCanvasElement): number[] => {
