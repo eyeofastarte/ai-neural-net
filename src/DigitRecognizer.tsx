@@ -14,7 +14,7 @@ export default function DigitRecognizer() {
     setPredictions(results);
   };
 
-  const selectedModel = getModelById(selectedModelId);
+  // const selectedModel = getModelById(selectedModelId);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-8">
